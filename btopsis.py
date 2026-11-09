@@ -1,7 +1,6 @@
 """Warstwa obliczeniowa metody Belief-TOPSIS (B-TOPSIS).
 
-Moduł nie zależy od Streamlit ani Matplotlib, dzięki czemu można go testować
-i używać niezależnie od interfejsu. Numery wzorów odnoszą się do rozdziału 1 pracy.
+Numery wzorów odnoszą się do rozdziału 1 pracy.
 """
 
 import numpy as np

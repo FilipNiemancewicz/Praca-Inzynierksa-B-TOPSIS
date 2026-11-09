@@ -13,11 +13,8 @@ from btopsis import default_utilities, evaluate
 
 st.set_page_config(page_title="B-TOPSIS Analyzer", page_icon="📊", layout="wide")
 
-st.title("📊 Wielokryterialna Analiza Decyzyjna B-TOPSIS")
-st.markdown(
-    "Moduł analityczny metody **Belief-TOPSIS** oparty na teorii struktur"
-    " przekonań Dempstera-Shafera i **metryce Jousselme'a**."
-)
+st.title("Wielokryterialna Analiza Decyzyjna B-TOPSIS")
+
 
 
 def show_run(run):
@@ -30,7 +27,7 @@ def show_run(run):
         st.subheader("🏆 Ranking końcowy")
         st.dataframe(results, use_container_width=True, height=500)
         st.download_button(
-            label="📥 Pobierz wyniki jako CSV",
+            label="Pobierz wyniki jako CSV",
             data=results.to_csv(index=False).encode("utf-8"),
             file_name="wyniki_btopsis.csv",
             mime="text/csv",
@@ -38,7 +35,7 @@ def show_run(run):
         )
 
     with chart_col:
-        st.subheader("📈 Wykres względnej bliskości ($R_i$)")
+        st.subheader("Wykres względnej bliskości ($R_i$)")
         fig, ax = plt.subplots(figsize=(8, max(5, len(results) * 0.28)))
         y_pos = np.arange(len(results))
         ax.barh(y_pos, results["R_i"], color="#2b5c8f", edgecolor="black", alpha=0.85)
@@ -52,7 +49,7 @@ def show_run(run):
         st.pyplot(fig)
         plt.close(fig)
 
-    with st.expander("🔍 Zobacz macierz podobieństwa (D)"):
+    with st.expander("Zobacz macierz podobieństwa (D)"):
         st.write(f"Wymiar macierzy: {D.shape[0]}x{D.shape[1]}")
         labels = run["state_cols"]
         st.dataframe(pd.DataFrame(D, index=labels, columns=labels).style.format("{:.3f}"))
@@ -60,7 +57,7 @@ def show_run(run):
 
 def show_comparison(runs):
     """Porównuje rankingi z kolejnych uruchomień (analiza wrażliwości)."""
-    st.subheader("🔁 Porównanie scenariuszy")
+    st.subheader("Porównanie scenariuszy")
 
     params = pd.DataFrame(
         {
@@ -86,7 +83,7 @@ def show_comparison(runs):
 
 
 with st.sidebar:
-    st.header("⚙️ 1. Wczytanie danych")
+    st.header("1. Wczytanie danych")
     uploaded_file = st.file_uploader(
         "Wgraj plik (CSV lub Excel)", type=["csv", "xlsx", "xls"]
     )
@@ -103,7 +100,7 @@ if uploaded_file is not None:
         else:
             df = pd.read_excel(uploaded_file)
 
-        st.subheader("📋 Podgląd wczytanych danych")
+        st.subheader("Wczytane dane")
         st.dataframe(df, use_container_width=True, height=350)
 
         col1, col2 = st.columns(2)
@@ -140,11 +137,7 @@ if uploaded_file is not None:
 
             with st.sidebar:
                 st.markdown("---")
-                st.header("⚖️ 2. Parametry metody")
-                st.caption(
-                    "Użyteczności ocen (od najlepszej do najgorszej). Z nich"
-                    " powstaje macierz podobieństwa: s_ij = 1 − |U_i − U_j|."
-                )
+                st.header("2. Parametry metody")
                 defaults = default_utilities(n_states)
                 utilities = []
                 for idx, state in enumerate(state_cols):
@@ -172,7 +165,7 @@ if uploaded_file is not None:
                     st.warning("Użyteczności powinny maleć od najlepszej do najgorszej oceny.")
 
             st.markdown("---")
-            st.subheader("🎯 Konfiguracja wag kryteriów (pytań)")
+            st.subheader("Konfiguracja wag kryteriów (pytań)")
             criteria_list = df[crit_col].unique()
 
             crit_cols_ui = st.columns(min(len(criteria_list), 4))
@@ -189,7 +182,7 @@ if uploaded_file is not None:
 
             runs = st.session_state["runs"]
 
-            if st.button("🚀 Uruchom B-TOPSIS", type="primary"):
+            if st.button("Uruchom B-TOPSIS", type="primary"):
                 results, D = evaluate(
                     df, obj_col, crit_col, state_cols, dont_know_col,
                     weights=weights, utilities=utilities,
@@ -205,7 +198,7 @@ if uploaded_file is not None:
                         "weights": dict(weights),
                     }
                 )
-                st.success("✅ Obliczenia zakończone sukcesem!")
+                st.success("Obliczenia zakończone sukcesem")
 
             if runs:
                 st.markdown("---")
@@ -219,7 +212,7 @@ if uploaded_file is not None:
                         key=f"view_run_{len(runs)}",
                     )
                 with clear_col:
-                    if st.button("🗑️ Wyczyść scenariusze"):
+                    if st.button("🗑Wyczyść scenariusze"):
                         st.session_state["runs"] = []
                         st.rerun()
 
@@ -231,4 +224,4 @@ if uploaded_file is not None:
     except Exception as e:
         st.error(f"Wystąpił błąd podczas przetwarzania: {str(e)}")
 else:
-    st.info("👈 Wgraj plik z danymi w panelu bocznym, aby rozpocząć analizę.")
+    st.info("Wgraj plik z danymi w panelu bocznym, aby rozpocząć analizę.")
