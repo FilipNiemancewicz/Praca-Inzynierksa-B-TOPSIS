@@ -1,0 +1,19 @@
+# Środowisko i pliki tymczasowe Pythona
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+ENV/
+
+# Konfiguracje edytorów i IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Śmieci systemowe (macOS i Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
